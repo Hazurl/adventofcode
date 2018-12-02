@@ -1,5 +1,6 @@
 #include <array>
-static constexpr std::array<long long,   1029> input {
+#include <string_view>
+static constexpr std::array<long long,       1029> input {
 	-17,
 	+14,
 	+10,
