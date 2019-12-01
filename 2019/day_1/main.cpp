@@ -94,8 +94,18 @@ int main() {
         }
     }
 
-    tinge::println("[Part 1] Fuel required: ", part_1(lines));
-    tinge::println("[Part 2] Fuel required: ", part_2(lines));
+    {
+        PROFILE_SCOPE("Result");
+        {
+            PROFILE_SCOPE("Part 1");
+            tinge::println("[Part 1] Fuel required: ", part_1(lines));
+        }
+
+        {
+            PROFILE_SCOPE("Part 2");
+            tinge::println("[Part 2] Fuel required: ", part_2(lines));
+        }
+    }
 
     {
         PROFILE_PART(1);
