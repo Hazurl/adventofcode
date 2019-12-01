@@ -6,36 +6,18 @@ long find_fuel_required(long mass) {
     return mass / 3 - 2;
 }
 
-std::vector<long> convert_to_long(std::vector<std::string> const& lines) {
-    PROFILE_FUNCTION();
-    std::vector<long> values;
-    values.reserve(lines.size());
-
-    {
-        PROFILE_SCOPE("transfrom string to values");
-        std::transform(std::begin(lines), std::end(lines), std::back_inserter(values), 
-            [] (auto const& line) {
-                return std::stol(line);
-            });
-    }
-
-    return values;
 }
 
-}
-
-void part_1(std::vector<std::string> const& lines) {
-    auto values = p1::convert_to_long(lines);
-
+long part_1(std::vector<std::string> const& lines) {
     long total_fuel = [&] {
         PROFILE_SCOPE("sum fuels");
-        return std::accumulate(std::begin(values), std::end(values), 0L, 
-            [] (long total_fuel, long mass) {
-                return total_fuel + p1::find_fuel_required(mass);
+        return std::accumulate(std::begin(lines), std::end(lines), 0L, 
+            [] (long total_fuel, std::string const& mass) {
+                return total_fuel + p1::find_fuel_required(std::stol(mass));
             });
     }();
 
-    tinge::println("Fuel required: ", total_fuel);
+    return total_fuel;
 }
 
 namespace p2 {
@@ -48,21 +30,40 @@ long find_fuel_required(long mass, long fuel = 0) {
         return find_fuel_required(fuel_for_mass, fuel + fuel_for_mass);
     }
 }
-    
+
+long find_fuel_required_no_tail(long mass) {
+    long fuel_for_mass = p1::find_fuel_required(mass);
+    if (fuel_for_mass < 0) {
+        return 0;
+    } else {
+        return find_fuel_required_no_tail(fuel_for_mass) + fuel_for_mass;
+    }
 }
 
-void part_2(std::vector<std::string> const& lines) {
-    auto values = p1::convert_to_long(lines);
+}
 
+long part_2(std::vector<std::string> const& lines) {
     long total_fuel = [&] {
         PROFILE_SCOPE("sum fuels");
-        return std::accumulate(std::begin(values), std::end(values), 0L, 
-            [] (long total_fuel, long mass) {
-                return total_fuel + p2::find_fuel_required(mass);
+        return std::accumulate(std::begin(lines), std::end(lines), 0L, 
+            [] (long total_fuel, std::string const& mass) {
+                return total_fuel + p2::find_fuel_required(std::stol(mass));
             });
     }();
 
-    tinge::println("Fuel required: ", total_fuel);
+    return total_fuel;
+}
+
+long part_2_no_tail(std::vector<std::string> const& lines) {
+    long total_fuel = [&] {
+        PROFILE_SCOPE("sum fuels");
+        return std::accumulate(std::begin(lines), std::end(lines), 0L, 
+            [] (long total_fuel, std::string const& mass) {
+                return total_fuel + p2::find_fuel_required_no_tail(std::stol(mass));
+            });
+    }();
+
+    return total_fuel;
 }
 
 int main() {
@@ -85,8 +86,16 @@ int main() {
                 PROFILE_SCOPE("Part 2");
                 part_2(lines);
             }
+
+            {
+                PROFILE_SCOPE("Part 2 no tail");
+                part_2(lines);
+            }
         }
     }
+
+    tinge::println("[Part 1] Fuel required: ", part_1(lines));
+    tinge::println("[Part 2] Fuel required: ", part_2(lines));
 
     {
         PROFILE_PART(1);
@@ -96,5 +105,10 @@ int main() {
     {
         PROFILE_PART(2);
         part_2(lines);
+    }
+
+    {
+        PROFILE_PART(2_no_tail);
+        part_2_no_tail(lines);
     }
 }
