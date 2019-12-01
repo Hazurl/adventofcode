@@ -35,3 +35,6 @@
 
 build/
 tmp/
+2018/formatted_inputs/
+
+**/profiler_output_file.json
