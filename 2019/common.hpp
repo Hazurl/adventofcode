@@ -14,6 +14,13 @@
 #include <cpp-tools/profiler.hpp>
 #include <tinge/tinge.hpp>
 
+#define ALWAYS_PROFILE(str) \
+auto _watch_ ## __LINE__ = prf::scoped_watch_of_precision<std::chrono::nanoseconds>([] (auto d) { \
+    tinge::println_h(str, ": ", d.count() / 1000'000., "ms"); \
+}); \
+
+#define PROFILE_PART(n) ALWAYS_PROFILE("Part " #n); PROFILE_SCOPE("Part " #n)
+
 std::vector<std::string> read_file(std::filesystem::path const& path) {
     PROFILE_FUNCTION();
 
