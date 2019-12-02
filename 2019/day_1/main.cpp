@@ -71,7 +71,8 @@ int main() {
 
     auto lines = [] (){
         PROFILE_SCOPE("Reading file");
-        return read_file("input.txt");
+        auto file = open_file("input.txt");
+        return lines_of(file);
     }();
 
     {

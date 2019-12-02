@@ -21,7 +21,7 @@ auto _watch_ ## __LINE__ = prf::scoped_watch_of_precision<std::chrono::nanosecon
 
 #define PROFILE_PART(n) ALWAYS_PROFILE("Part " #n); PROFILE_SCOPE("Part " #n)
 
-std::vector<std::string> read_file(std::filesystem::path const& path) {
+std::ifstream open_file(std::filesystem::path const& path) {
     PROFILE_FUNCTION();
 
     std::ifstream file(path);
@@ -30,9 +30,15 @@ std::vector<std::string> read_file(std::filesystem::path const& path) {
         throw std::runtime_error("Couldn't opent file '" + path.string() + "'");
     }
 
+    return file;
+}
+
+std::vector<std::string> lines_of(std::istream& is) {
+    PROFILE_FUNCTION();
+
     std::string line;
     std::vector<std::string> lines;
-    while(std::getline(file, line)) {
+    while(std::getline(is, line)) {
         if (!line.empty()) {
             lines.emplace_back(std::move(line));
         }
@@ -40,6 +46,26 @@ std::vector<std::string> read_file(std::filesystem::path const& path) {
 
     return lines;
 }
+
+
+template<typename T>
+std::vector<T> comma_separated(std::istream& is) {
+    std::vector<T> values;
+
+    T value;
+    while(is >> value) {
+        values.emplace_back(std::move(value));
+
+        if (is.peek() == ',') {
+            is.get();
+        } else {
+            break;
+        }
+    }
+
+    return values;
+}
+
 
 template<typename...Ts, typename...Rs>
 std::tuple<Ts...> extract_(std::istream& is, std::index_sequence<>, Rs&&...rs) {
