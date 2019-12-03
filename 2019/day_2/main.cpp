@@ -46,6 +46,13 @@ long part_1(std::vector<long> const& values) {
 
 namespace p2 {
 
+template<long...Is>
+constexpr auto all_solutions_for(std::integer_sequence<long, Is...>) {
+    return std::array<std::pair<long, long>, sizeof...(Is)>{ std::make_pair(Is / 100, Is % 100)... };
+}
+
+constexpr static auto all_solutions = all_solutions_for(std::make_integer_sequence<long, 100*100>{});
+
 }
 
 long part_2(std::vector<long> const& values) {
@@ -62,6 +69,22 @@ long part_2(std::vector<long> const& values) {
     std::cerr << "No solution\n";
     return -1;
 }
+
+long part_2_unseq_par(std::vector<long> const& values) {
+    long const solution = 19690720;
+    auto it = std::find_if(std::execution::par_unseq, std::begin(p2::all_solutions), std::end(p2::all_solutions), [&values, solution] (auto s) {
+        auto&&[noun, verb] = s;
+        return solution == p1::process_with_noun_and_verb(values, noun, verb);
+    });
+
+    if (it == std::end(p2::all_solutions)) {
+        std::cerr << "No solution\n";
+        return -1;
+    }
+
+    return it->first * 100 + it->second;
+}
+
 
 int main() {
     PROFILE_FUNCTION();
@@ -83,6 +106,11 @@ int main() {
             {
                 PROFILE_SCOPE("Part 2");
                 part_2(values);
+            }
+
+            {
+                PROFILE_SCOPE("Part 2 unseq_par");
+                part_2_unseq_par(values);
             }
         }
     }
@@ -108,5 +136,10 @@ int main() {
     {
         PROFILE_PART(2);
         part_2(values);
+    }
+
+    {
+        PROFILE_PART(2_unseq_par);
+        part_2_unseq_par(values);
     }
 }
