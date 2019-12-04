@@ -10,6 +10,7 @@
 #include <type_traits>
 #include <variant>
 #include <execution>
+#include <deque>
 
 #include <cpp-tools/dbg.hpp>
 #include <cpp-tools/profiler.hpp>
