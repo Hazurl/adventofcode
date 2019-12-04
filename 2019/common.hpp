@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
+#include <cassert>
 #include <type_traits>
 #include <variant>
 #include <execution>
