@@ -71,9 +71,9 @@ long part_2(std::vector<char> const& values, int w, int h) {
     for(int h_ = 0; h_ < h; ++h_) {
         for(int w_ = 0; w_ < w; ++w_) {
             switch(*image_it++) {
-                case 0: std::cout << '.'; break;
+                case 0: std::cout << ' '; break;
                 case 1: std::cout << '#'; break;
-                default: std::cout << ' '; break;
+                default: std::cout << '.'; break;
             }
         }
         std::cout << '\n';
