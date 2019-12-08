@@ -50,6 +50,19 @@ std::vector<std::string> lines_of(std::istream& is) {
     return lines;
 }
 
+std::vector<char> digits_of(std::istream& is) {
+    PROFILE_FUNCTION();
+    std::vector<char> digits;
+
+    char cur = is.peek();
+    while(cur >= '0' && cur <= '9') {
+        digits.push_back(is.get() - '0');
+        cur = is.peek();
+    }
+
+    return digits;
+}
+
 
 template<typename T>
 std::vector<T> comma_separated(std::istream& is) {
