@@ -278,7 +278,7 @@ int main() {
         auto file = open_file("input.txt");
         return comma_separated<long>(file);
     }();
-/*
+
 
     {
         PROFILE_SCOPE("Caching");
@@ -294,7 +294,7 @@ int main() {
             }
         }
     }
-*/
+
     {
         PROFILE_SCOPE("Result");
         {
@@ -307,7 +307,7 @@ int main() {
             tinge::println("[Part 2]: ", part_2(values));
         }
     }
-/*
+
     {
         PROFILE_PART(1);
         part_1(values);
@@ -316,5 +316,5 @@ int main() {
     {
         PROFILE_PART(2);
         part_2(values);
-    }*/
+    }
 }
