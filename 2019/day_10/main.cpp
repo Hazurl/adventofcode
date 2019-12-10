@@ -126,8 +126,6 @@ long get_nth(std::vector<std::string> const& values, std::size_t i) {
     auto&&[map, asteroids] = p1::map_asteroids(values);
 
     auto pos = p1::get_best_most_location(map, asteroids).first;
-    //std::pair<long, long> pos = {8,3};
-    DBG(pos);
 
     std::vector<Asteroid> as;
 
@@ -139,21 +137,11 @@ long get_nth(std::vector<std::string> const& values, std::size_t i) {
         long blocking = p1::count_asteroids_in_los(pos, a, map);
 
         as.push_back({ a, blocking, angle });
-
-        //DBG(dx, ", ", dy, ": ", gcd, " <= ", as.back());
     }
-/*
-    std::nth_element(std::begin(as), std::begin(as) + as.size(), std::end(as), 
-        [] (auto lhs, auto rhs) {
-            if (lhs.dist == rhs.dist) {
-                return lhs.angle < rhs.angle;
-            }
-            return lhs.dist < rhs.dist;
-        });*/
 
-    std::sort(std::begin(as), std::end(as));
+    std::nth_element(std::begin(as), std::begin(as) + i, std::end(as));
 
-    DBG(as, "size: ", as.size());
+    //std::sort(std::begin(as), std::end(as));
 
     return as[i].pos.first * 100 + as[i].pos.second;
 }
@@ -172,15 +160,6 @@ int main() {
         auto file = open_file("input.txt");
         return lines_of(file);
     }();
-
-    DBG("angle_of_vec ", p2::angle_of_vec({0, 1}));
-    DBG("angle_of_vec ", p2::angle_of_vec({1, 0}));
-    DBG("angle_of_vec ", p2::angle_of_vec({0, -1}));
-    DBG("angle_of_vec ", p2::angle_of_vec({-1, 0}));
-    DBG("angle_of_vec ", p2::angle_of_vec({0, 2}));
-    DBG("angle_of_vec ", p2::angle_of_vec({2, 0}));
-    DBG("angle_of_vec ", p2::angle_of_vec({0, -2}));
-    DBG("angle_of_vec ", p2::angle_of_vec({-2, 0}));
 
 /*
     {
