@@ -11,6 +11,7 @@
 #include <type_traits>
 #include <variant>
 #include <execution>
+#include <unordered_set>
 #include <deque>
 
 #include <cpp-tools/dbg.hpp>
