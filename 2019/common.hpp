@@ -13,6 +13,7 @@
 #include <execution>
 #include <unordered_set>
 #include <deque>
+#include <regex>
 
 #include <cpp-tools/dbg.hpp>
 #include <cpp-tools/profiler.hpp>
