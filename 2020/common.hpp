@@ -37,13 +37,13 @@ std::ifstream open_file(std::filesystem::path const& path) {
     return file;
 }
 
-std::vector<std::string> lines_of(std::istream& is) {
+std::vector<std::string> lines_of(std::istream& is, bool remove_empty_lines = true) {
     PROFILE_FUNCTION();
 
     std::string line;
     std::vector<std::string> lines;
     while(std::getline(is, line)) {
-        if (!line.empty()) {
+        if (!remove_empty_lines || !line.empty()) {
             lines.emplace_back(std::move(line));
         }
     }
