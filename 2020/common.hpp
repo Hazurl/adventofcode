@@ -64,6 +64,17 @@ std::vector<char> digits_of(std::istream& is) {
     return digits;
 }
 
+std::vector<std::string> split(std::istream& is, char del) {
+    std::vector<std::string> strs;
+    std::string str;
+
+    while(std::getline(is, str, del)) {
+        strs.emplace_back(std::move(str));
+    }
+
+    return strs;
+}
+
 
 template<typename T>
 std::vector<T> comma_separated(std::istream& is) {
