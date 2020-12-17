@@ -25,18 +25,6 @@ auto _watch_ ## __LINE__ = prf::scoped_watch_of_precision<std::chrono::nanosecon
 
 #define PROFILE_PART(n) ALWAYS_PROFILE("Part " #n); PROFILE_SCOPE("Part " #n)
 
-std::ifstream open_file(std::filesystem::path const& path) {
-    PROFILE_FUNCTION();
-
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        tinge::errorln("Couldn't open file '", path, "'");
-        throw std::runtime_error("Couldn't opent file '" + path.string() + "'");
-    }
-
-    return file;
-}
-
 std::vector<std::string> lines_of(std::istream& is, bool remove_empty_lines = true) {
     PROFILE_FUNCTION();
 
@@ -112,3 +100,16 @@ template<typename...Ts>
 std::tuple<Ts...> extract(std::istream& is) {
     return extract_(is, std::make_index_sequence<sizeof...(Ts)>{});
 }
+
+std::ifstream open_file(std::filesystem::path const& path) {
+    PROFILE_FUNCTION();
+
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        tinge::errorln("Couldn't open file '", path, "'");
+        throw std::runtime_error("Couldn't opent file '" + path.string() + "'");
+    }
+
+    return file;
+}
+
