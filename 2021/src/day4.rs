@@ -4,7 +4,7 @@ use std::slice::Iter;
 use std::vec::Vec;
 
 #[derive(Debug, Clone)]
-struct Board(Vec<Vec<(u32, bool)>>);
+struct Board(Vec<Vec<(u32, bool)>>, bool);
 
 #[derive(Debug, Clone)]
 struct Game {
@@ -27,6 +27,7 @@ fn parse_board(chunk: Chunk<'_, Iter<'_, String>>) -> Board {
 					.collect()
 			})
 			.collect(),
+		false,
 	)
 }
 
@@ -91,6 +92,38 @@ fn calculate_score(board: &Board, last_draw: u32) -> u64 {
 	return (sum * last_draw) as u64;
 }
 
-fn part2(_game: Game) -> u64 {
+fn part2(mut game: Game) -> u64 {
+	let mut board_to_finish = game.boards.len();
+
+	for draw in game.draws {
+		for board in &mut game.boards {
+			if board.1 {
+				continue;
+			}
+			let mut marked_element: Option<(usize, usize)> = None;
+			'board_loop: for (row_idx, line) in board.0.iter_mut().enumerate() {
+				for (col_idx, elem) in line.iter_mut().enumerate() {
+					if elem.0 == draw {
+						elem.1 = true;
+						marked_element = Some((row_idx, col_idx));
+						break 'board_loop;
+					}
+				}
+			}
+
+			if let Some((row_idx, col_idx)) = marked_element {
+				let line_done = board.0[row_idx].iter().all(|(_, marked)| *marked);
+				let col_done = board.0.iter().all(|row| row[col_idx].1);
+				if line_done || col_done {
+					board_to_finish -= 1;
+					board.1 = true;
+
+					if board_to_finish == 0 {
+						return calculate_score(board, draw);
+					}
+				}
+			}
+		}
+	}
 	0
 }
