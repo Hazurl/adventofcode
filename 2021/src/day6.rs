@@ -1,6 +1,4 @@
 use crate::utility;
-use itertools::*;
-use std::slice::Iter;
 use std::vec::Vec;
 
 fn parse_file(base_path_inputs: &str, filename: &str) -> Vec<u8> {
@@ -28,7 +26,7 @@ fn simulate(initial_population: &Vec<u8>, max_gen: usize) -> u64 {
 		population[*n as usize] += 1;
 	}
 
-	for gen in 0..max_gen {
+	for _ in 0..max_gen {
 		let mut new_population = [0u64; 9];
 
 		new_population[8] = population[0]; // newborn
