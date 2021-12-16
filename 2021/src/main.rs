@@ -1,6 +1,6 @@
-mod day15;
+mod day16;
 mod utility;
 
 fn main() {
-    day15::run("./inputs");
+    day16::run("./inputs");
 }
