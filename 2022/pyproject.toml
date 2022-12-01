@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "2022"
+name = "advent_of_code"
 version = "0.1.0"
 description = ""
 authors = ["Hazurl <jules.ricou@hazurl.me>"]
