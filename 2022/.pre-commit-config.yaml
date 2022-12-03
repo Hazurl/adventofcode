@@ -12,6 +12,7 @@ repos:
     -   id: flake8
         args:
         - "--max-line-length=139"
+        - "--ignore=E203,W503"
 -   repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
