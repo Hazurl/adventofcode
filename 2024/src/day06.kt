@@ -27,19 +27,17 @@ enum class Direction {
     }
 }
 
-data class Position(val x: Int, val y: Int)
-
 open class GuardLeftMappedAreaException() : Exception()
 open class GuardStuckInLoopException() : Exception()
 
 data class State(
     val grid: List<List<Tile>>,
-    val guardPosition: Position,
+    val guardPosition: Vector2,
     val direction: Direction,
-    val positionsSeen: Set<Position>,
-    val guardSeen: Set<Pair<Position, Direction>>
+    val positionsSeen: Set<Vector2>,
+    val guardSeen: Set<Pair<Vector2, Direction>>
 ) {
-    private fun getTileAt(position: Position): Tile? {
+    private fun getTileAt(position: Vector2): Tile? {
         return try {
             grid[position.y][position.x]
         } catch (e: IndexOutOfBoundsException) {
@@ -47,7 +45,7 @@ data class State(
         }
     }
 
-    private fun getNextPredictedGuardPosition(): Position {
+    private fun getNextPredictedGuardPosition(): Vector2 {
         return when (direction) {
             Direction.UP -> guardPosition.copy(y = guardPosition.y - 1)
             Direction.DOWN -> guardPosition.copy(y = guardPosition.y + 1)
@@ -56,7 +54,7 @@ data class State(
         }
     }
 
-    private fun positionAsCharacter(position: Position): Char {
+    private fun positionAsCharacter(position: Vector2): Char {
         return if (position == guardPosition) {
             direction.asCharacter()
         } else if (positionsSeen.contains(position)) {
@@ -71,7 +69,7 @@ data class State(
         val output = StringBuilder()
         for (y in grid.indices) {
             for (x in grid[y].indices) {
-                val position = Position(x, y)
+                val position = Vector2(x, y)
                 output.append(positionAsCharacter(position))
             }
             output.append('\n')
@@ -79,7 +77,7 @@ data class State(
         println(output.toString())
     }
 
-    private fun stateWithNewGuardPositionAndDirection(newGuardPosition: Position, newDirection: Direction): State {
+    private fun stateWithNewGuardPositionAndDirection(newGuardPosition: Vector2, newDirection: Direction): State {
         val guardState = Pair(newGuardPosition, newDirection)
         if (guardState in guardSeen) {
             throw GuardStuckInLoopException()
@@ -102,17 +100,17 @@ data class State(
         }
     }
 
-    fun withWallAt(position: Position): State {
+    fun withWallAt(position: Vector2): State {
         return copy(
             grid = grid.mapIndexed { y, row ->
                 row.mapIndexed { x, c ->
-                    if (Position(x, y) == position) Tile.Wall else c
+                    if (Vector2(x, y) == position) Tile.Wall else c
                 }
             }
         )
     }
 
-    fun getSeenPositions(): Set<Position> {
+    fun getSeenPositions(): Set<Vector2> {
         var newState = this
         while (true) {
             try {
@@ -126,7 +124,7 @@ data class State(
 
 fun parseInitialState(content: String): State {
     val grid = mutableListOf<MutableList<Tile>>()
-    var guardPosition: Position? = null
+    var guardPosition: Vector2? = null
 
     content.lines().filter { it.isNotBlank() }.forEachIndexed { y, line ->
         grid.add(mutableListOf())
@@ -134,7 +132,7 @@ fun parseInitialState(content: String): State {
         line.forEachIndexed { x, c ->
             when (c) {
                 '^' -> {
-                    guardPosition = Position(x, y)
+                    guardPosition = Vector2(x, y)
                     row.add(Tile.Empty)
                 }
 
