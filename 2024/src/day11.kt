@@ -8,7 +8,7 @@ fun main() {
         return content.trim().split(" ").map(String::toLong)
     }
 
-    fun stonesForStone(stone: Stone) = iterator<Stone> {
+    fun blink(stone: Stone) = iterator<Stone> {
         if (stone == 0L) {
             yield(1L)
         } else {
@@ -23,11 +23,12 @@ fun main() {
     }
 
     fun stoneCountAfterNBlink(cache: MutableMap<Pair<Stone, Int>, Long>, stone: Stone, count: Int): Long {
-        if (count == 0) {
-            return 1
-        }
         return cache.getOrPut(Pair(stone, count)) {
-            stonesForStone(stone).asSequence().sumOf { s -> stoneCountAfterNBlink(cache, s, count - 1) }
+            return@getOrPut if (count == 0) {
+                1
+            } else {
+                blink(stone).asSequence().sumOf { s -> stoneCountAfterNBlink(cache, s, count - 1) }
+            }
         }
     }
 
