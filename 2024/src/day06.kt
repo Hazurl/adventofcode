@@ -5,28 +5,6 @@ enum class Tile {
     Empty
 }
 
-enum class Direction {
-    UP, DOWN, LEFT, RIGHT;
-
-    fun rotateRight(): Direction {
-        return when (this) {
-            Direction.UP -> Direction.RIGHT
-            Direction.RIGHT -> Direction.DOWN
-            Direction.DOWN -> Direction.LEFT
-            Direction.LEFT -> Direction.UP
-        }
-    }
-
-    fun asCharacter(): Char {
-        return when (this) {
-            Direction.UP -> '^'
-            Direction.DOWN -> 'v'
-            Direction.LEFT -> '<'
-            Direction.RIGHT -> '>'
-        }
-    }
-}
-
 open class GuardLeftMappedAreaException() : Exception()
 open class GuardStuckInLoopException() : Exception()
 

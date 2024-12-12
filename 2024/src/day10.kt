@@ -1,54 +1,5 @@
 import java.io.File
 
-class Grid<T> constructor(cells: List<List<T>>) {
-    val cells: List<List<T>> = cells
-
-    val width: Int
-        get() = cells[0].size
-
-    val height: Int
-        get() = cells.size
-
-    fun positionsOf(toFind: T) = iterator<Vector2> {
-        for ((position, item) in positions()) {
-            if (item == toFind) {
-                yield(position)
-            }
-        }
-    }
-
-    fun positions() = iterator<Pair<Vector2, T>> {
-        for (y in 0..<height) {
-            for (x in 0..<width) {
-                val position = Vector2(x, y)
-                yield(Pair(position, get(position)))
-            }
-        }
-    }
-
-    operator fun get(position: Vector2): T {
-        return cells[position.y][position.x]
-    }
-
-    fun inBounds(position: Vector2): Boolean {
-        return position.x in 0..<width && position.y in 0..<height
-    }
-
-    fun neighbors(position: Vector2): List<Vector2> {
-        val all = listOf(
-            Vector2(position.x, position.y - 1),
-            Vector2(position.x + 1, position.y),
-            Vector2(position.x, position.y + 1),
-            Vector2(position.x - 1, position.y)
-        )
-
-        return all.filter {
-            inBounds(it)
-        }
-    }
-
-}
-
 
 fun main() {
     fun parseGrid(content: String): Grid<Int> {
@@ -68,7 +19,7 @@ fun main() {
                 continue
             }
 
-            toVisit.addAll(grid.neighbors(visiting).filter { grid[it] == height + 1 })
+            toVisit.addAll(grid.neighbors(visiting).map { it.second }.filter { grid[it] == height + 1 })
         }
 
         return reachableNines.size
@@ -85,7 +36,7 @@ fun main() {
             if (height == 9) {
                 return 1
             }
-            return grid.neighbors(position).filter { grid[it] == height + 1 }.sumOf(::rec)
+            return grid.neighbors(position).map { it.second }.filter { grid[it] == height + 1 }.sumOf(::rec)
         }
         return rec(from)
     }
