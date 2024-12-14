@@ -6,10 +6,10 @@ fun main() {
         return Grid(content.trim().lines().map { it.map(Char::digitToInt) })
     }
 
-    fun countReachableNines(grid: Grid<Int>, from: Vector2): Int {
-        val reachableNines = mutableSetOf<Vector2>()
+    fun countReachableNines(grid: Grid<Int>, from: Vector2I): Int {
+        val reachableNines = mutableSetOf<Vector2I>()
 
-        val toVisit = mutableListOf<Vector2>(from)
+        val toVisit = mutableListOf<Vector2I>(from)
 
         while (toVisit.isNotEmpty()) {
             val visiting = toVisit.removeLast()
@@ -30,8 +30,8 @@ fun main() {
         return grid.positionsOf(0).asSequence().sumOf { countReachableNines(grid, it) }
     }
 
-    fun sumRatings(grid: Grid<Int>, from: Vector2): Int {
-        fun rec(position: Vector2): Int {
+    fun sumRatings(grid: Grid<Int>, from: Vector2I): Int {
+        fun rec(position: Vector2I): Int {
             val height = grid[position]
             if (height == 9) {
                 return 1

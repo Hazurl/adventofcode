@@ -1,8 +1,8 @@
 import java.io.File
 
-data class Antenna(val position: Vector2, val frequency: Char)
+data class Antenna(val position: Vector2I, val frequency: Char)
 data class Map(val width: Int, val height: Int, val antennas: List<Antenna>) {
-    fun contains(position: Vector2): Boolean {
+    fun contains(position: Vector2I): Boolean {
         return position.x in 0..<width && position.y in 0..<height
     }
 }
@@ -19,7 +19,7 @@ fun main() {
             for (x in 0..<width) {
                 val c = rows[y][x]
                 if (c != '.') {
-                    antennas.add(Antenna(Vector2(x, y), c))
+                    antennas.add(Antenna(Vector2I(x, y), c))
                 }
             }
         }
@@ -30,7 +30,7 @@ fun main() {
     fun part1(content: String): Int {
         val map = parseMap(content)
         val antennasPerFreq = map.antennas.groupBy { it.frequency }
-        val antiNodes = mutableSetOf<Vector2>()
+        val antiNodes = mutableSetOf<Vector2I>()
 
         for ((freq, antennas) in antennasPerFreq) {
             for (lhs in antennas) {
@@ -53,7 +53,7 @@ fun main() {
     fun part2(content: String): Int {
         val map = parseMap(content)
         val antennasPerFreq = map.antennas.groupBy { it.frequency }
-        val antiNodes = mutableSetOf<Vector2>()
+        val antiNodes = mutableSetOf<Vector2I>()
 
         for ((freq, antennas) in antennasPerFreq) {
             for (lhs in antennas) {

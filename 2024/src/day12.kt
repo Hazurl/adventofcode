@@ -8,9 +8,9 @@ fun main() {
 
     fun part1(content: String): Long {
         val garden = parseGarden(content)
-        val positionsSeen = HashSet<Vector2>()
+        val positionsSeen = HashSet<Vector2I>()
 
-        fun computePriceOfRegion(initial: Vector2): Long {
+        fun computePriceOfRegion(initial: Vector2I): Long {
             val toVisit = mutableListOf(initial)
             var area = 0L
             var fences = 0L
@@ -35,11 +35,11 @@ fun main() {
 
     fun part2(content: String): Long {
         val garden = parseGarden(content)
-        val positionsSeen = HashSet<Vector2>()
+        val positionsSeen = HashSet<Vector2I>()
 
-        fun computePriceOfRegion(initial: Vector2): Long {
+        fun computePriceOfRegion(initial: Vector2I): Long {
             val toVisit = mutableListOf(initial)
-            val fencesSeen = HashSet<Pair<Vector2, Direction>>()
+            val fencesSeen = HashSet<Pair<Vector2I, Direction>>()
 
             var area = 0L
             var fences = 0L
@@ -56,8 +56,8 @@ fun main() {
                 val neighbors = garden.neighbors(visiting)
                 area += 1
 
-                val upDownDelta = listOf(Vector2(0, -1), Vector2(0, 1))
-                val leftRightDelta = listOf(Vector2(-1, 0), Vector2(1, 0))
+                val upDownDelta = listOf(Vector2I(0, -1), Vector2I(0, 1))
+                val leftRightDelta = listOf(Vector2I(-1, 0), Vector2I(1, 0))
 
                 val directions = mutableSetOf<Direction>()
                 directions.addAll(neighbors.filter { garden[it.second] != garden[visiting] }.map { it.first })
