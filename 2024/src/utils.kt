@@ -1,3 +1,5 @@
+import kotlin.math.absoluteValue
+
 fun <T> assertEq(got: T, expected: T) {
     if (got != expected) {
         throw AssertionError("Expected $expected, got $got")
@@ -11,7 +13,7 @@ data class Vector2I(val x: Int, val y: Int): Comparable<Vector2I> {
     operator fun times(factor: Int) = Vector2I(x * factor, y * factor)
     operator fun div(factor: Int) = Vector2I(x / factor, y / factor)
 
-    fun toVVector2L() = Vector2L(x.toLong(), y.toLong())
+    fun toVector2L() = Vector2L(x.toLong(), y.toLong())
 
     override fun compareTo(other: Vector2I): Int {
         return if (y == other.y) {
@@ -20,7 +22,15 @@ data class Vector2I(val x: Int, val y: Int): Comparable<Vector2I> {
             y compareTo other.y
         }
     }
+
+    fun wrap(bounds: Vector2I) = Vector2I(Math.floorMod(x, bounds.x), Math.floorMod(y, bounds.y))
+    fun manhattanDistance(other: Vector2I): Int {
+        val diff = this - other
+        return diff.x.absoluteValue + diff.y.absoluteValue
+    }
 }
+
+
 
 data class Vector2L(val x: Long, val y: Long): Comparable<Vector2L> {
     operator fun plus(v: Vector2L) = Vector2L(x + v.x, y + v.y)
