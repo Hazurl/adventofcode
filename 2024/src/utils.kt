@@ -6,7 +6,7 @@ fun <T> assertEq(got: T, expected: T) {
     }
 }
 
-data class Vector2I(val x: Int, val y: Int): Comparable<Vector2I> {
+data class Vector2I(val x: Int, val y: Int) : Comparable<Vector2I> {
     operator fun plus(v: Vector2I) = Vector2I(x + v.x, y + v.y)
     operator fun minus(v: Vector2I) = Vector2I(x - v.x, y - v.y)
     operator fun unaryMinus() = Vector2I(-x, -y)
@@ -31,8 +31,7 @@ data class Vector2I(val x: Int, val y: Int): Comparable<Vector2I> {
 }
 
 
-
-data class Vector2L(val x: Long, val y: Long): Comparable<Vector2L> {
+data class Vector2L(val x: Long, val y: Long) : Comparable<Vector2L> {
     operator fun plus(v: Vector2L) = Vector2L(x + v.x, y + v.y)
     operator fun minus(v: Vector2L) = Vector2L(x - v.x, y - v.y)
     operator fun unaryMinus() = Vector2L(-x, -y)
@@ -74,7 +73,7 @@ enum class Direction {
 
 
 class Grid<T> constructor(cells: List<List<T>>) {
-    val cells: List<List<T>> = cells
+    val cells: MutableList<MutableList<T>> = cells.map{ it.toMutableList()}.toMutableList()
 
     val width: Int
         get() = cells[0].size
@@ -131,6 +130,31 @@ class Grid<T> constructor(cells: List<List<T>>) {
         return all.filter {
             !inBounds(it.second)
         }.map { it.first }
+    }
+
+    fun <R> map(f: (T) -> R): Grid<R> {
+        return mapWithPosition { _, value -> f(value) }
+    }
+
+    fun <R> mapWithPosition(f: (Vector2I, T) -> R): Grid<R> {
+        return Grid(
+            cells.mapIndexed { y, row -> row.mapIndexed { x, value -> f(Vector2I(x, y), value) } }
+        )
+    }
+
+    override fun toString(): String {
+        val str = StringBuilder()
+        for (row in cells) {
+            for (value in row) {
+                str.append(value)
+            }
+            str.append("\n")
+        }
+        return str.toString()
+    }
+
+    operator fun set(position: Vector2I, value: T) {
+        cells[position.y][position.x] = value
     }
 
 }
