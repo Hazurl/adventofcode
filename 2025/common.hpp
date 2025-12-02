@@ -67,6 +67,11 @@ std::vector<std::string> split(std::istream &is, char del) {
   return strs;
 }
 
+std::vector<std::string> split(std::string const &str, char del) {
+  std::stringstream stream{str};
+  return split(stream, del);
+}
+
 template <typename T> std::vector<T> comma_separated(std::istream &is) {
   std::vector<T> values;
 
@@ -113,4 +118,9 @@ std::ifstream open_file(std::filesystem::path const &path) {
   }
 
   return file;
+}
+
+template <typename... Ts> void panic(Ts &&...args) {
+  tinge::errorln(std::forward<Ts>(args)...);
+  throw std::runtime_error("oops");
 }
