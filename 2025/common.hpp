@@ -10,6 +10,7 @@
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <unordered_map>
 #include <unordered_set>
 #include <variant>
 #include <vector>
@@ -124,3 +125,11 @@ template <typename... Ts> void panic(Ts &&...args) {
   tinge::errorln(std::forward<Ts>(args)...);
   throw std::runtime_error("oops");
 }
+
+template <typename A, typename B> struct std::hash<std::pair<A, B>> {
+  std::size_t operator()(std::pair<A, B> const &p) const noexcept {
+    auto const h1 = std::hash<A>{}(p.first);
+    auto const h2 = std::hash<B>{}(p.second);
+    return h1 ^ (h2 << 1);
+  }
+};
