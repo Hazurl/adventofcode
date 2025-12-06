@@ -90,6 +90,19 @@ template <typename T> std::vector<T> comma_separated(std::istream &is) {
   return values;
 }
 
+template <typename T> std::vector<T> spaces_separated(std::istream &is) {
+  std::vector<T> values;
+
+  T value;
+  while (is >> value) {
+    values.emplace_back(std::move(value));
+    while (is.peek() == ' ')
+      is.get();
+  }
+
+  return values;
+}
+
 template <typename... Ts, typename... Rs>
 std::tuple<Ts...> extract_(std::istream &, std::index_sequence<>, Rs &&...rs) {
   return std::tuple<Ts...>(std::forward<Rs>(rs)...);
@@ -124,6 +137,13 @@ std::ifstream open_file(std::filesystem::path const &path) {
 template <typename... Ts> void panic(Ts &&...args) {
   tinge::errorln(std::forward<Ts>(args)...);
   throw std::runtime_error("oops");
+}
+
+template <typename... Ts> bool panic_if(bool cond, Ts &&...args) {
+  if (cond) {
+    panic(std::forward<Ts>(args)...);
+  }
+  return cond;
 }
 
 template <typename A, typename B> struct std::hash<std::pair<A, B>> {
