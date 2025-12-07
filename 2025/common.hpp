@@ -146,6 +146,27 @@ template <typename... Ts> bool panic_if(bool cond, Ts &&...args) {
   return cond;
 }
 
+template <typename S, typename T> void print_range(S &&msg, T const &range) {
+  tinge::notice(msg);
+  bool first = true;
+  for (auto const &value : range) {
+    if (!first) {
+      tinge::print(", ");
+    }
+    first = false;
+    tinge::print(value);
+  }
+  if (first) {
+    tinge::println("<empty>");
+  } else {
+    tinge::println("");
+  }
+}
+
+template <typename T> void print_range(T const &range) {
+  print_range("", range);
+}
+
 template <typename A, typename B> struct std::hash<std::pair<A, B>> {
   std::size_t operator()(std::pair<A, B> const &p) const noexcept {
     auto const h1 = std::hash<A>{}(p.first);
@@ -153,3 +174,18 @@ template <typename A, typename B> struct std::hash<std::pair<A, B>> {
     return h1 ^ (h2 << 1);
   }
 };
+template <typename A, typename B>
+std::ostream &std::operator<<(std::ostream &os,
+                              std::pair<A, B> const &p) noexcept {
+  return os << '[' << p.first << ", " << p.second << ']';
+}
+
+template <typename C, typename K, typename V>
+V try_get(C const &container, K const &key, V def) {
+  // C should be a map-like type such as std::unordered_map or std::map
+  if (auto it = container.find(key); it != std::end(container)) {
+    return it->second;
+  } else {
+    return def;
+  }
+}
