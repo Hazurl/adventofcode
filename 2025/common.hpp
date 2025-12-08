@@ -134,7 +134,7 @@ std::ifstream open_file(std::filesystem::path const &path) {
   return file;
 }
 
-template <typename... Ts> void panic(Ts &&...args) {
+template <typename... Ts> [[noreturn]] void panic(Ts &&...args) {
   tinge::errorln(std::forward<Ts>(args)...);
   throw std::runtime_error("oops");
 }
